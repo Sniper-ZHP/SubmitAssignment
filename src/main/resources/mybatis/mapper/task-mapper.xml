@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.tyut.assignsub.mapper.TaskMapper">
+    <resultMap id="TaskResultMap" type="Task">
+        <id column="id" property="id" javaType="Integer"/>
+        <result column="teacher_id" property="teacherId" javaType="Integer"/>
+        <result column="class_id" property="classId" javaType="Integer"/>
+        <result column="content" property="content" javaType="String"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date"/>
+        <result column="deadline" property="deadline" javaType="java.util.Date"/>
+    </resultMap>
+
+    <select id="getTaskById" parameterType="Integer" resultMap="TaskResultMap">
+        select *
+        from task
+        where id = #{id}
+    </select>
+
+    <select id="getTaskByClassId" resultMap="TaskResultMap">
+        select *
+        from task
+        where class_id = #{id}
+    </select>
+
+    <select id="getTaskByTeacherId" resultMap="TaskResultMap">
+        select *
+        from task
+        where teacher_id = #{id}
+    </select>
+
+    <delete id="deleteTaskById" parameterType="Integer">
+        delete
+        from task
+        where id = #{id}
+    </delete>
+
+    <update id="updateTaskById" parameterType="Task">
+        update task
+        set teacher_id=#{teacherId},
+            class_id=#{classId},
+            content=#{content},
+            create_time=#{createTime},
+            deadline=#{deadline}
+            where id = #{id}
+    </update>
+
+    <insert id="insertTask" parameterType="Task">
+        insert into task(id,teacher_id, class_id, content, create_time, deadline)
+            value (#{id},#{teacherId}, #{classId}, #{content}, #{createTime}, #{deadline})
+    </insert>
+
+</mapper>

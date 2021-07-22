@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.tyut.assignsub.mapper.SubmitMapper">
+    <resultMap id="SubmitResultMap" type="Submit">
+        <id column="id" property="id" javaType="Integer"/>
+        <result column="student_id" property="studentId" javaType="Integer"/>
+        <result column="task_id" property="taskId" javaType="Integer"/>
+        <result column="content" property="content" javaType="String"/>
+        <result column="enclosure" property="enclosure" javaType="String"/>
+        <result column="submit_time" property="submitTime" javaType="java.util.Date"/>
+        <result column="update_time" property="updateTime" javaType="java.util.Date"/>
+    </resultMap>
+    <insert id="insertSubmit" parameterType="Submit">
+        insert into submit(student_id, task_id, content, enclosure, submit_time, update_time)
+        values (#{studentId}, #{taskId}, #{content}, #{enclosure}, #{submitTime}, #{updateTime})
+    </insert>
+    <select id="getSubmitByStudentId" resultMap="SubmitResultMap" parameterType="Integer">
+        select *
+        from submit
+        where student_id = #{student_id}
+    </select>
+
+    <select id="getSubmitById" resultMap="SubmitResultMap" parameterType="Integer">
+        select *
+        from submit
+        where id = #{id}
+    </select>
+
+    <select id="getSubmitByTaskId" resultMap="SubmitResultMap" parameterType="Integer">
+        select *
+        from submit
+        where task_id = #{task_id}
+    </select>
+
+    <delete id="deleteSubmitById" parameterType="Integer">
+        delete
+        from submit
+        where id = #{id}
+    </delete>
+
+    <update id="updateSubmit" parameterType="Submit">
+        update submit
+        set student_id  = #{studentId},
+            task_id     = #{taskId},
+            content     = #{content},
+            enclosure   = #{enclosure},
+            submit_time = #{submitTime},
+            update_time = #{updateTime}
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.tyut.assignsub.mapper.TeacherMapper">
+    <resultMap id="TeacherResultMap" type="Teacher">
+        <id column="id" property="id" javaType="Integer"/>
+        <result column="name" property="name" javaType="String"/>
+        <result column="gender" property="gender" javaType="String"/>
+        <result column="college" property="college" javaType="String"/>
+        <result column="password" property="password" javaType="String"/>
+    </resultMap>
+    <select id="getAll" resultMap="TeacherResultMap">
+        select *
+        from teacher
+    </select>
+    <select id="getTeacherByIdAndPassword" resultMap="TeacherResultMap">
+        select *
+        from teacher
+        where id = #{id}
+          and password = #{password}
+    </select>
+
+    <insert id="insertTeacher" parameterType="Teacher">
+        insert into teacher(id, name, gender, college, password)
+        values (#{id}, #{name}, #{gender}, #{college}, #{password})
+    </insert>
+
+    <update id="updateTeacher" parameterType="Teacher">
+        update teacher
+        set name    = #{name},
+            gender  = #{gender},
+            college = #{college},
+            password = #{password}
+        where id = #{id}
+    </update>
+    <select id="getTeacherById" resultMap="TeacherResultMap" parameterType="Integer">
+        select *
+        from teacher
+        where id = #{id}
+    </select>
+    <delete id="deleteTeacherById" parameterType="Integer">
+        delete
+        from teacher
+        where id = #{id}
+    </delete>
+</mapper>

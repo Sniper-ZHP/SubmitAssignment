@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>作业在线提交系统-学生端</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/css/layui.css"
+          integrity="sha512-gK5o6RvUyTWSY+nO4Q9kJKGXbffUbV+u/R3bOAnCiOSIGt8GNDkvLvsQC2WaxyIQwGS56zpwt1TajavwKXBwKA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/layui.js"
+            integrity="sha512-lH7rGfsFWwehkeyJYllBq73IsiR7RH2+wuOVjr06q8NKwHp5xVnkdSvUm8RNt31QCROqtPrjAAd1VuNH0ISxqQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header layui-bg-green">
+        <div class="layui-logo layui-hide-xs layui-bg-green">作业提交系统-学生端</div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <!-- 移动端显示 -->
+            <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+                <i class="layui-icon layui-icon-spread-left"></i>
+            </li>
+
+            <li class="layui-nav-item layui-hide-xs layui-this"><a href="" th:href="@{/student/unsubmit}">查看尚未提交的作业</a>
+            </li>
+            <li class="layui-nav-item layui-hide-xs"><a href="" th:href="@{/student/submited}">查看已经提交的作业</a></li>
+            <li class="layui-nav-item layui-hide-xs"><a href="" th:href="@{/student/over}">查看已经截止的作业</a></li>
+
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                <a href="javascript:;" th:text="${session.student.name}">
+                    tester
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">修改密码</a></dd>
+                    <dd><a href="" th:href="@{/logout}">退出</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-more-vertical"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>您尚未提交的作业列表</legend>
+            </fieldset>
+
+            <div class="layui-form" style="margin-right: 150px">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>介绍</th>
+                        <th>发布教师</th>
+                        <th>发布时间</th>
+                        <th>截至时间</th>
+                        <th>提交</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${#strings.abbreviate(task.getContent(),15)}">贤心</td>
+                        <td th:text="${map[__${task.getTeacherId()}__]}">汉族</td>
+                        <td th:text="${#dates.format(task.getCreateTime(), 'yyyy/MM/dd HH:mm')}">1989-10-14</td>
+                        <td th:text="${#dates.format(task.getDeadline(), 'yyyy/MM/dd HH:mm')}">人生似修行</td>
+                        <td><a th:href="@{/student/submit-task/{id}(id=${task.getId()})}" href=""
+                               class="layui-btn layui-btn-normal">提交作业</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    //JS
+    layui.use(['element', 'layer', 'util'], function () {
+        var element = layui.element
+            , layer = layui.layer
+            , util = layui.util
+            , $ = layui.$;
+
+        //头部事件
+        util.event('lay-header-event', {
+            //左侧菜单事件
+            menuLeft: function (othis) {
+                layer.msg('展开左侧菜单的操作', {icon: 0});
+            }
+            , menuRight: function () {
+                layer.open({
+                    type: 1
+                    , content: '<div style="padding: 15px;">处理右侧面板的操作</div>'
+                    , area: ['260px', '100%']
+                    , offset: 'rt' //右上角
+                    , anim: 5
+                    , shadeClose: true
+                });
+            }
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    var testEditor;
+
+    $(function () {
+        testEditor = editormd("test-editormd", {
+            width: "90%",
+            height: 640,
+            syncScrolling: "single",
+            path: "/editormd/lib/"
+        });
+    });
+    var testEditor2;
+    $(function () {
+        testEditor2 = editormd.markdownToHTML("doc-content", {//注意：这里是上面DIV的id
+            htmlDecode: "style,script,iframe",
+            emoji: true,
+            taskList: true,
+            tocm: true,
+            tex: true, // 默认不解析
+            flowChart: true, // 默认不解析
+            sequenceDiagram: true, // 默认不解析
+            codeFold: true
+        });
+    });
+
+</script>
+</body>
+</html>
